@@ -34,7 +34,7 @@ class SQLiteVecRetriever:
         relevant_rows = db.execute(
             f"""
                 SELECT
-                    rowid,
+                    row_id,
                     distance
                 FROM 
                     vec_items
@@ -112,18 +112,21 @@ if __name__ == "__main__":
     query = "Give me about milk, cream, powder for babies"
     import time
 
-    start_time = time.time()
     retriever_virtual = SQLiteVecRetriever("./virtual_tables.db", using_virtual_table=True)
+    start_time = time.time()
     x = retriever_virtual.retrieve(
         query=query,
-        limit=5
+        limit=100,
     )
-    print("Time taken using virtual table: ", time.time() - start_time)
+    end_time = time.time()
+    print("Time taken using virtual table: ", end_time - start_time)
 
-    start_time = time.time()
+
     retriever_normal = SQLiteVecRetriever("./normal_tables.db", using_virtual_table=False)
+    start_time = time.time()
     x = retriever_normal.retrieve(
         query=query,
-        limit=5
+        limit=100,
     )
-    print("Time taken using normal table (Manually): ", time.time() - start_time)
+    end_time = time.time()
+    print("Time taken using normal table (Manually): ", end_time - start_time)

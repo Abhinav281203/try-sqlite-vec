@@ -35,7 +35,10 @@ class SQLiteVecIndexer:
             db.execute(f"SELECT * FROM {self.virtual_table} LIMIT 1").fetchone()
         except sqlite3.OperationalError:
             db.execute(
-                f"CREATE VIRTUAL TABLE {self.virtual_table} USING vec0(embedding float[{embedding_dim}])"
+                f"""CREATE VIRTUAL TABLE {self.virtual_table} USING vec0(
+                    row_id integer primary key,
+                    embedding float[{embedding_dim}]
+                )"""
             )
 
     def _insert_rows_virtual_table(self, db: sqlite3.Connection, rows: List[Row]) -> None:
